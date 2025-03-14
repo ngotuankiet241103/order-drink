@@ -1,0 +1,11 @@
+export const firebase ={
+    properties: {
+        apiKey: "AIzaSyCtJeotAC9yCwbfXL9hIal7w2_PlEhEcTI",
+        authDomain: "monkey-blogging-91132.firebaseapp.com",
+        projectId: "monkey-blogging-91132",
+        storageBucket: "monkey-blogging-91132.appspot.com",
+        messagingSenderId: "649193495779",
+        appId: "1:649193495779:web:5c67be3a03d16e7ca5f9d6"
+    }
+    
+}
