@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import Frame from "./Frame";
 import { run } from "../gemini/gemini-config";
 import { Buffer } from "buffer";
 import axios from "axios";
-import { menu } from "../types/store";
+import { menu, store } from "../types/store";
+import useStore from "../hooks/useStore";
 const StoreSave: React.FC = () => {
+  const {stores,addStore,insertStore} = useStore();
   const [name, setName] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [menu,setMenu] = useState<menu[]>([]);
+  const [url,setUrl]  = useState<string>("");
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -21,9 +24,9 @@ const StoreSave: React.FC = () => {
         const response = await axios.post("http://localhost:3000/api/stores/upload", formData, {
         });
         const keys = Object.keys(response.data);
-        setImage(response.data.image);
+        setUrl(response.data.image);
         setMenu(keys.filter(value => value != "image").reduce<menu[]>((acc, key) => {
-          return [...acc, {name: key, drinks: [...response.data[key].drinks]}];
+          return [...acc, {name: key, drinks:  response.data[key].drinks ? [...response.data[key].drinks] :  [...response.data[key]]}];
         },[]))
     }
 };
@@ -32,8 +35,14 @@ const StoreSave: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log("Store Name:", name);
-    console.log("Store Image:", image);
+    const store : store = {
+      id: stores.length + 1,
+      name,
+      image: url,
+      menu
+    };
+    insertStore(store);
+    
   };
   console.log(menu);
   
@@ -66,6 +75,7 @@ const StoreSave: React.FC = () => {
               required
             />
           </div>
+          {url && <img src={url} alt="store" className="w-1/4 h-1/4" />}
           {menu.length > 0 && menu.map((menu) => (
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -87,6 +97,7 @@ const StoreSave: React.FC = () => {
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              onClick={handleSubmit}
             >
               Save Store
             </button>

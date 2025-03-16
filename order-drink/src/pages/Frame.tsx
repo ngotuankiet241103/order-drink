@@ -5,8 +5,10 @@ const Frame = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="flex h-screen">
             <Sidebar />
-            <div className="flex-grow p-4">
-                {children}
+            <div className=" flex justify-center p-4">
+               <div className='w-[1200px]'>
+                     {children}
+               </div>
             </div>
         </div>
     );
