@@ -18,12 +18,14 @@ const DrinkOrder = ({
   isAdd: boolean;
   onClose: () => void
 }) => {
+  console.log(order_drink);
+  
   const {order_id} = useParams();
-  const [user,setUser] = useState("");
+  const [user,setUser] = useState(order_drink?.user_order);
   const [drink, setDrink] = useState(order_drink?.primary_drink);
   const [topping,setTopping] = useState(order_drink?.topping);
-  const [price,setPrice] = useState<number>();
-  const [note,setNote] = useState("");
+  const [price,setPrice] = useState<number>(calcPrice(order_drink?.primary_drink,order_drink?.topping));
+  const [note,setNote] = useState(order_drink?.note);
   const {insertOrderDrink} = useOrderDrink()
   const handleChangeDrink = (drink: drink) => {
     setDrink(drink)
@@ -32,7 +34,8 @@ const DrinkOrder = ({
     setTopping(topping)
   }
   useEffect(() => {
-    if(drink || topping){
+    if(drink || topping ){
+        
         
         setPrice(calcPrice(drink,topping))
 
@@ -61,10 +64,11 @@ const DrinkOrder = ({
           <input
             onChange={(e) => setUser(e.target.value.trim())}
             type="text"
+            defaultValue={user}
             className="px-2 w-full border-none outline-none text-left"
           />
         </div>
-        <Drink onChange={handleChangeDrink} menu={menus} />
+        <Drink drink={drink} onChange={handleChangeDrink} menu={menus} />
         <Topping
         topping={topping}
         onChange={handleChangeTopping}
@@ -75,6 +79,7 @@ const DrinkOrder = ({
           <input
             onChange={(e) => setNote(e.target.value.trim())}
             type="text"
+            defaultValue={note}
             className=" px-2 w-full border-none outline-none text-left"
           />
         </div>

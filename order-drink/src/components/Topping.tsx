@@ -26,7 +26,7 @@ const Topping = ({ menu,topping,onChange }: { menu?: menu,topping?: topping[],on
     };
     console.log(selectedToppings);
     useEffect(() => {
-        if(selectedToppings){
+        if(Object.keys(selectedToppings).length > 0){
             const toppings : topping[]= Object.keys(selectedToppings).map(index => {
                return {
                 drink: menu?.drinks[Number(index)],
@@ -37,6 +37,21 @@ const Topping = ({ menu,topping,onChange }: { menu?: menu,topping?: topping[],on
         }
          
     },[selectedToppings])
+    useEffect(() => {
+        if(topping){
+            const toppings = topping.reduce((prev,topping) => {
+                const index = menu?.drinks.findIndex(drink => topping.drink.drink_id === drink.drink_id)
+                return index ?   {
+                    ...prev,
+                    [index]: topping.total
+                } : {
+                    ...prev
+                }
+            },{})
+            setSelectedToppings(toppings)
+        }
+
+    },[])
     return (
         <div className='border block w-full text-center'>
            <span className="block border-b">Topping</span>

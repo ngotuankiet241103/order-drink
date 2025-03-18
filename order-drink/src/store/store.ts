@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import  OrderDrinkSlice from './reducer/OrderDrinkSlice'
+import  MenuSlice from './reducer/MenuSlice'
 import { state } from './state'
 
 export const store = configureStore<state>({
   reducer: {
-    orderDink: OrderDrinkSlice
+    orderDink: OrderDrinkSlice,
+    menuDrink: MenuSlice
   },
 })
 
